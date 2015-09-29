@@ -1,0 +1,10 @@
+{
+  "name": "Workshop-FrenchTech",
+  "version": "0.0.1",
+  "dependencies": {
+    "crypto": "latest",
+    "express": "latest",
+    "peer": "latest",
+    "socket.io": "^1.3.7"
+  }
+}

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+	<head lang="en">
+		<meta charset="UTF-8">
+		<title>Web RTC</title>
+		<script src="http://172.28.55.80:3000/socket.io/socket.io.js"></script>
+		<script src="vendor/peer.min.js"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+
+		<link rel="stylesheet" href="css/app.css"/>
+		<link rel="stylesheet" href="css/master.css"/>
+	</head>
+	<body>
+
+        <div id="info">
+            <p><strong id="state">Unconnect to peer server</strong></p>
+            <h2>Users</h2>
+            <div id="loading"></div>
+        </div>
+
+
+		<div id="content">
+
+		    <video id="video" autoplay width="640" height="480"></video>
+
+			<video id="webcam" autoplay width="640" height="480"></video>
+
+			<canvas id="canvas-source" width="640" height="480"></canvas>
+			<canvas id="canvas-highlights" width="640" height="480"></canvas>
+			<canvas id="canvas-blended" width="640" height="480"></canvas>
+
+			<div id="hotSpots">
+				<ul id="users" style="width:20px;height:20px"></ul>
+			</div>
+		</div>
+	</body>
+
+	<script src="js/client.js"></script>
+
+	<script src="vendor/app.js"></script>
+<script>
+    var i = 0;
+    var timeout;
+	(function(){
+		// consider using a debounce utility if you get too many consecutive events
+		$(window).on('motion', function(ev, data){
+			console.log('detected motion at', new Date(), 'with data:', data);
+			var spot = $(data.spot.el);
+			spot.addClass('active');
+			setTimeout(function(){
+				spot.removeClass('active');
+			}, 230);
+		});
+
+		$('#users').on('motion', function(){
+			//alert($(".userLink").attr("data-user"));
+            i++;
+
+            $("#loading").text(i);
+
+            fireButton();
+		});
+
+        //if the button is fired a certain time, we hit the appropriate action
+        function fireButton(){
+            clearTimeout(timeout);
+            if(i>=50){
+                //launch action
+                interactWebCam.stopWebcam();
+                i = 0;
+                connectVideo.askCall($(".userLink").attr("data-user"));
+            }
+            else {
+                timeout = setTimeout(function () {
+                    i = 0;
+                    $("#loading").text(i);
+                }, 500);
+            }
+        }
+
+	})();
+</script>
+
+</html>
