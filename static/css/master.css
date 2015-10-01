@@ -1,7 +1,62 @@
 html, body{
     width: 100%;
     height: 100%;
-    color: #FFF;
+    font-family: 'Lato', sans-serif;
+}
+
+#colorFont{
+    position: relative;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(71, 184, 169, 0.8);
+}
+
+#title{
+    padding-top: 20px;
+    text-align: center;
+    font-size: 48px;
+    font-weight: 700;
+}
+
+
+.hidden{
+    visibility: hidden;
+}
+
+
+/*---------------------*/
+/*---LOADING CIRCLES---*/
+/*---------------------*/
+
+#circleConnection {
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    z-index: 10;
+}
+
+#goToLeftSlide{
+    top: 0;
+    bottom: 0;
+    margin: auto auto auto 4%;
+    position: absolute;
+    left: 0;
+    width: 100px;
+    height: 100px;
+}
+#goToRightSlide{
+    top: 0;
+    bottom: 0;
+    margin: auto 4% auto auto;
+    position: absolute;
+    right: 0;
+    width: 100px;
+    height: 100px;
 }
 
 #info{
@@ -10,6 +65,61 @@ html, body{
 }
 
 #users{
-    width: 10px;
-    height: 10px;
+    display: none;
+}
+
+
+/*------------------*/
+/*-----FLICKITY-----*/
+/*------------------*/
+
+.flickity-viewport{
+    overflow: hidden;
+}
+
+.presentation-gallery {
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 300px;
+    height: 300px;
+    margin: auto;
+    position: absolute;
+}
+
+.gallery-cell{
+    background-color: #f2f2f2;
+    width: 100%;
+    height: 300px;
+    margin-right: 10px;
+}
+
+/* ---- page dots ---- */
+
+.flickity-page-dots {
+    position: absolute;
+    width: 100%;
+    bottom: -25px;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    text-align: center;
+    line-height: 1;
+}
+
+.flickity-rtl .flickity-page-dots { direction: rtl; }
+
+.flickity-page-dots .dot {
+    width: 23px;
+    height: 23px;
+    display: inline-block;
+    background: #4d6069;
+    margin: -8px 8px;
+}
+
+.flickity-page-dots .dot.is-selected {
+    filter: alpha(opacity=100); /* IE8 */
+    background: #ee1e3e;
+    opacity: 1;
 }

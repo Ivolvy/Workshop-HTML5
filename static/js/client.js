@@ -1,7 +1,6 @@
-var that = this;
 
 var socket;
-var video = $('#video')[0];
+var video = $('#webcam')[0];
 // users
 var uid;
 var cid ='';
@@ -10,6 +9,10 @@ var cid ='';
 var peerCoon;
 var peerCall ='';
 
+
+var userCall;
+
+var usersToConnect = [];
 
 var ConnectVideo = function () {
     // Cross broswer shit for getUserMedia
@@ -58,6 +61,9 @@ ConnectVideo.prototype.socketReady = function () {
     // listen socket
     socket.on('getUserId', connectVideo.getUserId);
     socket.on('getUsersList', connectVideo.getUsersList);
+    socket.on('getUsersToConnectList', function(usersTab){
+        usersToConnect = usersTab;
+    });
 
     // call for userid
     socket.emit('getUserId');
@@ -138,7 +144,8 @@ ConnectVideo.prototype.askCall = function (e) {
     cid = e;
 
     // get our video
-    navigator.getUserMedia({audio: true, video: true}, connectVideo.sendCall, connectVideo.gotError);
+    //navigator.getUserMedia({audio: true, video: true}, connectVideo.sendCall, connectVideo.gotError);
+    connectVideo.sendCall(localStream);
 };
 
 // send call
@@ -156,7 +163,12 @@ ConnectVideo.prototype.sendCall = function (stream) {
 ConnectVideo.prototype.receiveCall = function (call) {
     console.log('get call');
 
-    if(confirm('someone wants to connect with you') == true) {
+    alert("someone wants to connect with you, continue to play");
+
+
+    userCall = call;
+
+  /*  if(confirm('someone wants to connect with you') == true) {
         interactWebCam.stopWebcam(); //stop client's webcam
 
         // call
@@ -167,7 +179,36 @@ ConnectVideo.prototype.receiveCall = function (call) {
 
         // get our micro stream
         navigator.getUserMedia({audio: true, video: true}, connectVideo.answerCall, connectVideo.gotError);
+    }*/
+};
+
+
+ConnectVideo.prototype.connectUser = function(userId){
+    var userId = userId;
+
+    console.log("connectUser");
+    console.log("connectUser tab: "+usersToConnect.length);
+
+
+    if(usersToConnect.length < 1) {
+        usersToConnect.push(userId);
+        connectVideo.askCall(userId);
+        socket.emit('getUsersToConnectList', usersToConnect);
     }
+    else if(usersToConnect.length == 1){
+        interactWebCam.stopWebcam(); //stop client's webcam
+
+        // call
+        peerCall = userCall;
+
+        // listen call for stream
+        peerCall.on('stream', connectVideo.receiveStream);
+
+        // get our micro stream
+       // navigator.getUserMedia({audio: true, video: true}, connectVideo.answerCall, connectVideo.gotError);
+        connectVideo.answerCall(localStream);
+    }
+
 };
 
 // answer call
@@ -186,7 +227,10 @@ ConnectVideo.prototype.receiveStream = function (stream) {
     console.log('reveive stream', stream);
 
     // push the stream to video
+  //  video.src = window.URL.createObjectURL(stream);
     video.src = window.URL.createObjectURL(stream);
+    $('#video').width($('body').width());
+    $('#video').height($('body').height());
 };
 
 /** UTILS **/

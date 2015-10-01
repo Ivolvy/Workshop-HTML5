@@ -12,7 +12,6 @@ var peer = require('peer').ExpressPeerServer;
 // connected users
 var users = [];
 
-
 /** HTTP SERVER **/
 // http server
 var server = require('http').createServer(app);
@@ -56,6 +55,13 @@ io.on('connection', function (socket) {
 		io.emit('getUsersList', users);
 	});
 
+
+	// get usersToConnect list
+	socket.on('getUsersToConnectList', function(usersToConnect){
+		// emit usersToConnect list to everybody
+		io.emit('getUsersToConnectList', usersToConnect);
+	});
+
 	// disconnect
 	socket.on('disconnect', function(){
 
@@ -69,6 +75,9 @@ io.on('connection', function (socket) {
 
 		// emit users list to everybody
 		io.emit('getUsersList', users);
+
+        var usersToConnect = [];
+        io.emit('getUsersToConnectList', usersToConnect);
 	});
 });
 
